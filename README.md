@@ -9,4 +9,4 @@ In order to learn more about Cypher, python and neo4j
 Feel free to copy and learn.
 
 
-
+next level is to take this knowledge to django
