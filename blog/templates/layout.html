@@ -6,7 +6,7 @@
   <div class="metanav">
   {% if session.username %}
     Logged in as <b>{{ session.username }}</b>
-    <a href="{{ url_for('post_edit') }}">EDIT</a>
+    <a href="{{ url_for('post_editor') }}">EDIT</a>
 {#      <a href="">EDIT</a>#}
   {% endif %}
 

@@ -13,8 +13,20 @@ def get_recent_posts(number):
                      " RETURN user.username AS username, post, COLLECT(DISTINCT tag.title) AS tags"
                      " ORDER BY post.timestamp DESC"
                      " LIMIT {number}", params)
-
     return result
+
+
+def find_post(post_slug):
+    params = {"slug": post_slug}
+    result = Neo.run(" MATCH (post:Post)<-[:TAGGED]-(tag:Tag)"
+                     " WHERE post.slug={slug}"
+                     " RETURN post, COLLECT(tag.title) as tags", params)
+    return result.single()
+
+
+class Post:
+    def __init__(self, title, content, tags=None, category=None):
+        pass
 
 
 class User:
@@ -69,7 +81,7 @@ class User:
         user = self.find()
         today = date_today()
         slug = today + "_" + slugify(title)
-        timestamp()
+        time = timestamp()
 
         # Create POST and relationship: user WRITTEN post
         # with ses.begin_transaction() as tx:
@@ -79,7 +91,7 @@ class User:
                   'created': today,
                   'content': content,
                   'username': user['username'],
-                  'time': timestamp(),
+                  'time': time,
                   }
         result = Neo.run("MATCH (user:User { username:{username} }) "
                          "CREATE path=(user)-[:WRITTEN]->"
@@ -129,7 +141,3 @@ class User:
                          " ORDER BY post.timestamp DESC"
                          " LIMIT {number}", params)
         return result
-
-
-class Post:
-    pass

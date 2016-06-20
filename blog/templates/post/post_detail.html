@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layout.html" %}
 
-</body>
-</html>
+{% block body %}
+    <div> <h1>{{ post.title }}</h1>
+    </div>
+
+    <p>
+    {{ post.content }}
+    </p>
+
+    <ul class="tags">
+        {% for tag in tags %}
+            <li>{{ tag }}</li>
+        {% endfor %}
+    </ul>
+{% endblock body %}

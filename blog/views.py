@@ -1,4 +1,4 @@
-from .models import User, get_recent_posts
+from .models import User, get_recent_posts, find_post
 from flask import Flask, request, session, redirect, url_for, render_template, flash, get_flashed_messages
 from .help_functions import Password
 
@@ -77,10 +77,36 @@ def add_post():
 
 @app.route('/post_detail/<post_slug>')
 def post_detail(post_slug):
-    return render_template("post/post_detail.html")
+
+    record = find_post(post_slug)
+    post = record['post']
+    tags = record['tags']
+
+    print(request.method)
+    return render_template("post/post_detail.html", post=post, tags=tags)
 
 
-@app.route('/post_editor', methods=['GET'])
-def post_edit():
-    return render_template("post/post_editor.html")
+@app.route('/post_editor', methods=['GET', 'POST'])
+def post_editor():
+    print(request.method, request.form)
+    if request.method == 'GET':
+        print('GET')
+        return render_template("post/post_editor.html")
+
+    title = request.form['title']
+    tags = request.form['tags']
+    content = request.form['content']
+
+    if not title:
+        flash("You must fill the title.")
+    elif not tags:
+        flash("You must give at least one tag.")
+    elif not content:
+        flash("You must write some text.")
+    elif not User(session['username']).add_post(title, content, tags=tags):
+        flash("The post with {title}, has been written today, you can write same tomorrow".format(title=title))
+
+    return redirect(url_for('index'))
+
+
 

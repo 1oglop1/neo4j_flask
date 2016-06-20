@@ -2,7 +2,7 @@ FROM POST LIST
 <ul class="posts">
 {% for row in posts %}
   <li>
-    <a href="{{ row.post.slug }}"><b>{{ row.post.title }}</b></a>
+    <a href="{{ url_for('post_detail', post_slug=row.post.slug) }}"><b>{{ row.post.title }}</b></a>
       {% if request.path == "/" %}
 
 {#        by <a href="{{ url_for('profile', username=row.username) }}">{{ row.username }}</a>#}
