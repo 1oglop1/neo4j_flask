@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     posts = get_recent_posts(5)
-    return render_template('index.html', posts=posts)
+    return render_template('basic_setup.html', posts=posts)
 
 
 @app.route('/logout', methods=['GET'])

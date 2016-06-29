@@ -1,0 +1,10 @@
+svg .pumpkin{
+    fill: yellow;
+    stroke: orange;
+    stroke-width: 5;
+    background-color: blue;
+}
+
+.pumpkin:hover{
+    fill: green;
+}
