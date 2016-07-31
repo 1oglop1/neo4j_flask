@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+        svg {
+        font-family:"Helvetica", "Arial", sans-serif;
+        height: 400px;
+        margin: 25px;
+        width: 1300px;
+        border: thin solid red;
+    }
+
+    .type {
+        fill: #888;
+        text-anchor: middle;
+    }
+
+    .shape {
+        fill: #eee;
+        stroke: #ccc;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="../d3.v3.js"></script>
+<script src="d3pluswrap.js"></script>
+  <svg>
+        <!-- Text that will use the D3plus default wrapping. -->
+        <text class="type" dy="15px" x="75px">Wrapped</text>
+        <rect class="shape" height="150px" width="150px" y="50px"></rect>
+        <text id="rectWrap" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="75px" cy="300px"></circle>
+        <text id="circleWrap" class="wrap" y="225px" x="0px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <!-- Text that D3plus will resize to fit the available space. -->
+        <text class="type" dy="15px" x="275px">Resized + Wrapped</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="200px"></rect>
+        <text id="rectResizeWrap" class="wrap" y="50px" x="200px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="275px" cy="300px"></circle>
+        <text id="circleResizeWrap" class="wrap" y="225px" x="200px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <!-- Text that D3plus will resize to fit the available space. -->
+        <text class="type" dy="15px" x="475px">Resized </text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="400px"></rect>
+        <text id="rectResize" class="wrap" y="50px" x="400px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="475px" cy="300px"></circle>
+        <text id="circleResize" class="wrap" y="225px" x="400px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <!-- For comparison, how SVG would display the text without D3plus. -->
+        <text class="type" dy="15px" x="675px">Default Behavior</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="600px"></rect>
+        <text class="wrap" y="50px" x="600px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="675px" cy="300px"></circle>
+        <text class="wrap" y="225px" x="600px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+    </svg>
+
+    <svg>
+        <!-- Horiztonal Align -->
+        <text class="type" dy="15px" x="75px">Left Aligned</text>
+        <rect class="shape" height="150px" width="150px" y="50px"></rect>
+        <text id="rectALeftWrap" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="75px" cy="300px"></circle>
+        <text id="circleALeftWrap" class="wrap" y="225px" x="0px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="275px">Middle Aligned</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="200px"></rect>
+        <text id="rectAMiddleWrap" class="wrap" y="50px" x="200px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="275px" cy="300px"></circle>
+        <text id="circleAMiddleWrap" class="wrap" y="225px" x="200px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="475px">Right Aligned</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="400px"></rect>
+        <text id="rectARightWrap" class="wrap" y="50px" x="400px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="475px" cy="300px"></circle>
+        <text id="circleARightWrap" class="wrap" y="225px" x="400px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="675px">Left Aligned Resized</text>
+        <rect class="shape" x="600px" height="150px" width="150px" y="50px"></rect>
+        <text id="rectALeftResize" x="600px" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="675px" cy="300px"></circle>
+        <text id="circleALeftResize" class="wrap" y="225px" x="600px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="875px">Middle Aligned Resized</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="800px"></rect>
+        <text id="rectAMiddleResize" class="wrap" y="50px" x="800px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="875px" cy="300px"></circle>
+        <text id="circleAMiddleResize" class="wrap" y="225px" x="800px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="1075px">Right Aligned Resized</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="1000px"></rect>
+        <text id="rectARightResize" class="wrap" y="50px" x="1000px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="1075px" cy="300px"></circle>
+        <text id="circleARightResize" class="wrap" y="225px" x="1000px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+    </svg>
+
+       <svg>
+        <!-- Vertical Align -->
+        <text class="type" dy="15px" x="75px">Top Aligned</text>
+        <rect class="shape" height="150px" width="150px" y="50px"></rect>
+        <text id="rectVTopWrap" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="75px" cy="300px"></circle>
+        <text id="circleVTopWrap" class="wrap" y="225px" x="0px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="275px">Middle Aligned</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="200px"></rect>
+        <text id="rectVMiddleWrap" class="wrap" y="50px" x="200px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="275px" cy="300px"></circle>
+        <text id="circleVMiddleWrap" class="wrap" y="225px" x="200px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="475px">Bottom Aligned</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="400px"></rect>
+        <text id="rectVBottomWrap" class="wrap" y="50px" x="400px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="475px" cy="300px"></circle>
+        <text id="circleVBottomWrap" class="wrap" y="225px" x="400px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="675px">Top Aligned Resized</text>
+        <rect class="shape" x="600px" height="150px" width="150px" y="50px"></rect>
+        <text id="rectBTopResize" x="600px" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="675px" cy="300px"></circle>
+        <text id="circleVTopResize" class="wrap" y="225px" x="600px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="875px">Middle Aligned Resized</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="800px"></rect>
+        <text id="rectVMiddleResize" class="wrap" y="50px" x="800px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="875px" cy="300px"></circle>
+        <text id="circleVMiddleResize" class="wrap" y="225px" x="800px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="1075px">Bottom Aligned Resized</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="1000px"></rect>
+        <text id="rectVBottomResize" class="wrap" y="50px" x="1000px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="1075px" cy="300px"></circle>
+        <text id="circleVBottomResize" class="wrap" y="225px" x="1000px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+    </svg>
+
+    <svg>
+        <!-- Padding -->
+        <text class="type" dy="15px" x="75px">No Padding</text>
+        <rect class="shape" height="150px" width="150px" y="50px"></rect>
+        <text id="rectP0Wrap" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="75px" cy="300px"></circle>
+        <text id="circleP0Wrap" class="wrap" y="225px" x="0px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="275px">10px Padding</text>
+        <rect class="shape" x="200" height="150px" width="150px" y="50px"></rect>
+        <text id="rectP10Wrap" x="200" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="275px" cy="300px"></circle>
+        <text id="circleP10Wrap" class="wrap" y="225px" x="200px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="475px">50px Padding</text>
+        <rect class="shape" height="150px" x="400" width="150px" y="50px"></rect>
+        <text id="rectP50Wrap" class="wrap" x="400" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="475px" cy="300px"></circle>
+        <text id="circleP50Wrap" class="wrap" y="225px" x="400px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="675px">No Padding Resized</text>
+        <rect class="shape" x="600px" height="150px" width="150px" y="50px"></rect>
+        <text id="rectP0Resize" x="600px" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="675px" cy="300px"></circle>
+        <text id="circleP0Resize" class="wrap" y="225px" x="600px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="875px">10px Padding Resized</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="800px"></rect>
+        <text id="rectP10Resize" class="wrap" y="50px" x="800px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="875px" cy="300px"></circle>
+        <text id="circleP10Resize" class="wrap" y="225px" x="800px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="1075px">50px Padding Resized</text>
+        <rect class="shape" height="150px" width="150px" y="50px" x="1000px"></rect>
+        <text id="rectP50Resize" class="wrap" y="50px" x="1000px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="1075px" cy="300px"></circle>
+        <text id="circleP50Resize" class="wrap" y="225px" x="1000px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+    </svg>
+
+    <svg>
+        <!-- Manual Positioning -->
+        <text class="type" dy="15px" x="75px">X: 20px</text>
+        <rect class="shape" height="150px" width="150px" y="50px"></rect>
+        <text id="rectXWrap" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="75px" cy="300px"></circle>
+        <text id="circleXWrap" class="wrap" y="225px" x="0px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="275px">Y: 20px</text>
+        <rect class="shape" x="200" height="150px" width="150px" y="50px"></rect>
+        <text id="rectYWrap" x="200" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="275px" cy="300px"></circle>
+        <text id="circleYWrap" class="wrap" y="225px" x="200px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="475px">X: 20px Resize</text>
+        <rect class="shape" height="150px" x="400" width="150px" y="50px"></rect>
+        <text id="rectXWrapResize" class="wrap" x="400" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="475px" cy="300px"></circle>
+        <text id="circleXWrapResize" class="wrap" y="225px" x="400px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="675px">Y: 20px Resize</text>
+        <rect class="shape" x="600px" height="150px" width="150px" y="50px"></rect>
+        <text id="rectYWrapResize" x="600px" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="675px" cy="300px"></circle>
+        <text id="circleYWrapResize" class="wrap" y="225px" x="600px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+    </svg>
+
+    <svg>
+        <!-- Manual Sizing -->
+        <text class="type" dy="15px" x="75px">Width: 90px</text>
+        <rect class="shape" height="150px" width="150px" y="50px"></rect>
+        <text id="rectWidthWrap" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="75px" cy="300px"></circle>
+        <text id="circleWidthWrap" class="wrap" y="225px" x="0px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="275px">Height: 90px</text>
+        <rect class="shape" x="200" height="150px" width="150px" y="50px"></rect>
+        <text id="rectHeightWrap" x="200" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="275px" cy="300px"></circle>
+        <text id="circleHeightWrap" class="wrap" y="225px" x="200px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="475px">Resize Width: 90px</text>
+        <rect class="shape" height="150px" x="400" width="150px" y="50px"></rect>
+        <text id="rectWidthWrapResize" class="wrap" x="400" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="475px" cy="300px"></circle>
+        <text id="circleWidthWrapResize" class="wrap" y="225px" x="400px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="675px">Resize Height: 90px</text>
+        <rect class="shape" x="600px" height="150px" width="150px" y="50px"></rect>
+        <text id="rectHeightWrapResize" x="600px" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="675px" cy="300px"></circle>
+        <text id="circleHeightWrapResize" class="wrap" y="225px" x="600px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+    </svg>
+
+    <svg>
+        <!-- Font Sizing -->
+        <text class="type" dy="15px" x="75px">Larger Font</text>
+        <rect class="shape" height="150px" width="150px" y="50px"></rect>
+        <text id="rectFontSizeWrap" class="wrap" y="50px" font-size="26">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="75px" cy="300px"></circle>
+        <text id="circleFontSizeWrap" class="wrap" y="225px" x="0px" font-size="26">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="275px">Restrict to Large Fonts</text>
+        <rect class="shape" x="200" height="150px" width="150px" y="50px"></rect>
+        <text id="rectFontsLargeWrapResize" x="200" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="275px" cy="300px"></circle>
+        <text id="circleFontsLargeWrapResize" class="wrap" y="225px" x="200px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="475px">Restrict to Small Fonts</text>
+        <rect class="shape" height="150px" x="400" width="150px" y="50px"></rect>
+        <text id="rectFontsSmallWrapResize" class="wrap" x="400" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="475px" cy="300px"></circle>
+        <text id="circleFontsSmallWrapResize" class="wrap" y="225px" x="400px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+    </svg>
+
+    <svg>
+        <!-- Rotation -->
+        <text class="type" dy="15px" x="75px">Rotate 90</text>
+        <rect class="shape" height="150px" width="150px" y="50px"></rect>
+        <text id="rect90Wrap" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="75px" cy="300px"></circle>
+        <text id="circle90Wrap" class="wrap" y="225px" x="0px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="275px">Rotate -90</text>
+        <rect class="shape" x="200" height="150px" width="150px" y="50px"></rect>
+        <text id="rectN90Wrap" x="200" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="275px" cy="300px"></circle>
+        <text id="circleN90Wrap" class="wrap" y="225px" x="200px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="475px">Rotate 180</text>
+        <rect class="shape" height="150px" x="400" width="150px" y="50px"></rect>
+        <text id="rect180Wrap" class="wrap" x="400" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="475px" cy="300px"></circle>
+        <text id="circle180Wrap" class="wrap" y="225px" x="400px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+         <!-- Rotation + Resize -->
+        <text class="type" dy="15px" x="675px">Resize + Rotate 90</text>
+        <rect class="shape" height="150px" x="600" width="150px" y="50px"></rect>
+        <text id="rect90WrapResize" class="wrap" x="600" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="675px" cy="300px"></circle>
+        <text id="circle90WrapResize" class="wrap" y="225px" x="600px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="875px">Resize + Rotate -90</text>
+        <rect class="shape" x="800" height="150px" width="150px" y="50px"></rect>
+        <text id="rectN90WrapResize" x="800" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="875px" cy="300px"></circle>
+        <text id="circleN90WrapResize" class="wrap" y="225px" x="800px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+
+        <text class="type" dy="15px" x="1075px">Resize + Rotate 180</text>
+        <rect class="shape" height="150px" x="1000" width="150px" y="50px"></rect>
+        <text id="rect180WrapResize" class="wrap" x="1000" y="50px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+        <circle class="shape" r="75px" cx="1075px" cy="300px"></circle>
+        <text id="circle180WrapResize" class="wrap" y="225px" x="1000px" font-size="12">Here is a long text string that SVG should wrap by default, but it does not.</text>
+    </svg>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="graph.css">
+<head>
+    <meta charset="utf-8">
+</head>
+
+<style>
+    svg {
+        font-family: "Helvetica", "Arial", sans-serif;
+        height: 400px;
+        margin: 25px;
+        width: 1300px;
+        border: thin solid red;
+    }
+
+    .type {
+        fill: #888;
+        text-anchor: middle;
+    }
+
+    .shape {
+        fill: #eee;
+        stroke: #ccc;
+    }
+</style>
+<body>
+<svg>
+    <!-- Text that will use the D3plus default wrapping. -->
+    <text class="type" dy="15px" x="75px">Wrapped</text>
+    <rect class="shape" height="150px" width="150px" y="50px"></rect>
+    <text id="rectWrap" class="wrap" y="50px" font-size="12">Here is a long text string that SVG should wrap by default,
+        but it does not.
+    </text>
+    <circle class="shape" r="75px" cx="75px" cy="300px"></circle>
+    <text id="circleWrap" class="wrap" y="225px" x="0px" font-size="12">Here is a long text string that SVG should wrap
+        by default, but it does not.
+    </text>
+
+</svg>
+</body>
+
+<script src="../d3.v3.js"></script>
+
+<script src="d3pluswrap.js"></script>
+
+</html>

@@ -10,7 +10,11 @@
   {
     "name":"Neo4j",
     "label":"Database",
-    "id":3}
+    "id":3},
+  {
+    "name":"Super long text in this node is written",
+      "label":"Database",
+      "id":4}
         ],
 
   "links":[

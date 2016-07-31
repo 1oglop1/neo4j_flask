@@ -1,10 +1,19 @@
-svg .pumpkin{
-    fill: yellow;
-    stroke: orange;
-    stroke-width: 5;
-    background-color: blue;
+.node {
+  /*fill: red;*/
+  /*stroke: #222;*/
+  /*stroke-width: 1.5px;*/
+}
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+  stroke-width: 2px;
 }
 
-.pumpkin:hover{
-    fill: green;
+text {
+  font-family: 'Fira Mono', monospace;
+  /*font-family: 'Roboto Mono';*/
+  /*fill: none;*/
+
+  pointer-events: none;
 }
+
