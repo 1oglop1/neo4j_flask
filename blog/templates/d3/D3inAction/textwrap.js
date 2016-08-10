@@ -7,27 +7,15 @@
 // y = h/2, x = w/2 => w = 2x
 // max height = r .. if next rect00 > r, or
 
+function spacer(){
+    console.log("-------------------------");
+}
+
 var ctw = {};
 
 ctw.textwrap = function () {
 
-    var _resize = false;            // Should the text be resized in the container?
-    var _wrap = false;              // Should the text be wrapped in the container?
-    var _gElement;                  // Represents the text element that will have text wrapped in
-
-    var _x;                         // The offset x-position
-    var _y;                         // The offset y-position
-    var _maxWidth;                     // The maximum width that should be afforded for text rendering
-    var _maxHeight;                    // The maximum height that should be afforded for text rendering
-
-
-    var _minCharsWidth = 3;
-    var _fullTextWidth = NaN;
-    var _maxLines = NaN;
-    var _maxLineWidth = NaN;
-
-    var _charHeight = NaN;
-
+    var _gElement;
 
     /// Parse some basic sizing properties from the elements that we are dealing with
     /// @params {Object} vars - An object that contains all the settings that we've determined so far
@@ -56,69 +44,107 @@ ctw.textwrap = function () {
 
         }
 
-        vars.container.x = _x || x;
-        vars.container.y = _y || y;
-        vars.container.maxHeight = _maxHeight || height;
-        vars.container.maxWidth = _maxWidth || width;
-
-
-
+        vars.container.x =  x;
+        vars.container.y =  y;
+        vars.container.maxHeight =  height;
+        vars.container.maxWidth =  width;
     }
 
+    // put two strings together
     function catText(text1,text2){
         var text;
         var t1LastChar= text1.charAt(text1.length-1);
-
+ // (text1 === "" || text2==="" )
         var connector = " ";
         if(t1LastChar === "" || t1LastChar === "-"){
             connector = "";
         }
-
         text = text1 + connector + text2;
-
         return text;
-
     }
 
-    // computes width of word in svg text tag
-    function getWordWidth(word, textLength, elementTextWidth){
-
-        var wordWidth = (word.length * elementTextWidth) / textLength;
-        return wordWidth
+    function textBBDim(text, vars){
+        var wordElement = _gElement.append("text").text(text);
+        var wordBBox = wordElement.node().getBBox();
+        wordElement.remove();
+        return wordBBox
     }
 
-    function processText(vars){
-            // text attributes
-        vars.fontSize = parseFloat(vars.textElement.attr("font-size") || vars.textElement.style("font-size"));
+    function parseTextAttributes(vars){
+        vars.fontSize = null; // font size of base text
+        vars.textAnchor = null; // anchor of base text
+        vars.textBBox = null; // BBox of base text
+        vars.textY = null; // BB y position of base text
+        vars.wordsWidht = []; // array containing BB width of each word
+        vars.textMinWidth = 3; //minimum text width
 
-        vars.textElement.attr("dy",0);
+
+
+        vars.fontSize = parseFloat(vars.textBaseElement.attr("font-size") || vars.textBaseElement.style("font-size"));
+
+        vars.textBaseElement.attr("dy",0);
         // vars.textAnchor =
-        vars.textAnchor = vars.textElement.attr("text-anchor") || vars.textElement.style("text-anchor");
-        vars.textBBox = vars.textElement.node().getBBox();
+        vars.textAnchor = vars.textBaseElement.attr("text-anchor") || vars.textBaseElement.style("text-anchor");
+        vars.textBBox = vars.textBaseElement.node().getBBox();
         vars.textY = vars.textBBox.y;
-        vars.textElement.node().getBBox();
-        vars.textWidth = vars.textBBox.width;
+        vars.textBaseElement.node().getBBox();
+        vars.textInputWidth = vars.textBBox.width;
 
         vars.textHeight =vars.textBBox.height;
         vars.lineStep = (vars.fontSize * 1.1) / 2;
 
         // Split the text into words
         var wordBreak = /[^\s\-\/\;\:\&]+\-?\/?\;?\:?\&?/g;
-        vars.text = vars.textElement.text();
+        vars.text = vars.textBaseElement.text();
         vars.words = vars.text.match(wordBreak);
 
+        for(var widx =0; widx < vars.words.length; widx++){
+            vars.wordsWidht.unshift(textBBDim(vars.words[widx]).width);
+        }
+        vars.wordsWidht.reverse();
         //console.log('firstWord',vars.words);
-        vars.textMinWidth = getWordWidth(vars.words[0], vars.text.length, vars.textWidth);
+        vars.textMinWidth = vars.wordsWidht[0];
+    }
 
 
+    function compareNumbers(a, b) {
+            return b - a;
+        }
 
-        var ty = vars.textY;
+    // add ... at the end of word and adjust it
+    function addEllipsis(word, spaceLeft, lineText){
+        return "#TO IMPLEMENT";
+        //
+        // var tmpWord = word;
+        // var ellipsis = "\u2026";
+        // var wordWidth = getWordWidth(word, vars.text.length, vars.textInputWidth);
+        // var ellipsisW  = getWordWidth(ellipsis, vars.text.length, vars.textInputWidth);
+        // var cnt = word.length;
+        //
+        // while(((ellipsisW + wordWidth) > spaceLeft) && cnt){
+        //     tmpWord = tmpWord.slice(0,cnt--);
+        //     wordWidth = getWordWidth(tmpWord, vars.text.length, vars.textInputWidth);
+        // }
+        // return tmpWord+ellipsis;
+    }
+
+    // verify if the word can fit to the text
+    function canWordFit(wordWidth, remainingLineWidth){
+        // console.log("canWordFit ", remainingLineWidth,wordWidth, remainingLineWidth - wordWidth);
+        return remainingLineWidth - wordWidth > 0;
+    }
+
+    function processText(vars){
+
+        parseTextAttributes(vars);
+
+        var textYpos = vars.textY;
         var line = 1;
         var r = vars.container.r;
         var wHalf;
-        var dy = parseFloat(vars.textElement.attr("dy"));
+        var dy = parseFloat(vars.textBaseElement.attr("dy"));
 
-        wHalf = Math.sqrt(Math.pow(r,2) - Math.pow(ty,2));
+        wHalf = Math.sqrt(Math.pow(r,2) - Math.pow(textYpos,2));
         var lineWidth = 2 * wHalf;
         // console.log(String.format(" line {1}, r{0}, ty {2}, wHalf {3}",r, line, ty, wHalf));
         // console.log(String.format(" sqrt({0}^2 - {1}^2) = {2}",r, ty, wHalf));
@@ -132,18 +158,14 @@ ctw.textwrap = function () {
         // vars.gElement.append("rect").attr("width",lineWidth).attr("height",vars.textHeight)
         //          .attr("fill","none").attr("stroke","blue").attr("id",line)
         //          .attr("transform",String.format("translate({0},{1})",-wHalf,ty));
-
-
         function computeNextLine(currentLine){
             line = currentLine +1;
 
-
             dy -= vars.lineStep; // compute 1 line up
-            vars.textElement.attr("dy",dy); // move text 1 line up
-            ty = parseFloat(vars.textElement.node().getBBox().y); // get top conrner position of next line
+            vars.textBaseElement.attr("dy",dy); // move text 1 line up
+            textYpos = parseFloat(vars.textBaseElement.node().getBBox().y); // get top corner position of next line
 
-
-            wHalf = Math.sqrt(Math.pow(r,2) - Math.pow(ty,2)); // compute half width
+            wHalf = Math.sqrt(Math.pow(r,2) - Math.pow(textYpos,2)); // compute half width
             // console.log(String.format(" line {1}, r{0}, ty {2}, wHalf {3}",r, line, ty, wHalf));
             // console.log(String.format(" sqrt({0}^2 - {1}^2) = {2}",r, ty, wHalf));
             var lineWidth = 2*wHalf; // compute full width
@@ -152,6 +174,7 @@ ctw.textwrap = function () {
             lines[line] = {"width":lineWidth, "dy":dy};
             lines[-line] = {"width":lineWidth, "dy":-dy};
             // console.log(line,"width",lineWidth, "totalWidth",totalLineWidth, "posdy",Math.abs(dy), "negdy",dy);
+            // calculate even and odd width (one at time)
             line%2==0 ? evenWidth += totalLineWidth||0 : oddWidth += totalLineWidth||0;
 
             // debug rectangles
@@ -164,39 +187,18 @@ ctw.textwrap = function () {
         }
 
         // compute lines
-        while ( Math.max(evenWidth,oddWidth) <= vars.textWidth && Math.abs(ty) < vars.container.r *0.8 && line < 8){
+        while ( Math.max(evenWidth,oddWidth) <= vars.textInputWidth && Math.abs(textYpos) < vars.container.r *0.8 && line < 8){
             computeNextLine(line);
             //console.log("while",line, lines[line].width,lines[line].negdy);
         }
 
-        // remove previous text element
-        vars.textElement.remove()
+        // remove base text element
+        vars.textBaseElement.remove();
         //
         // find starting line and fit at least 1 word
         while(lines[line].width < vars.textMinWidth){
             //console.log("not long enough",line,lines[line].width, vars.textMinWidth)
             line--;
-        }
-
-        // verify if the word can fit to the text
-        function canWordFit(word, lineWidth, lineTextWidth){
-            var wordWidth = getWordWidth(word, vars.text.length, vars.textWidth);
-            return (wordWidth + lineTextWidth) < lineWidth
-        }
-
-        // add ... at the end of word and adjust it
-        function addEllipsis(word, spaceLeft, lineText){
-            var tmpWord = word;
-            var ellipsis = "\u2026"
-            var wordWidth = getWordWidth(word, vars.text.length, vars.textWidth);
-            var ellipsisW  = getWordWidth(ellipsis, vars.text.length, vars.textWidth);
-            var cnt = word.length;
-
-            while(((ellipsisW + wordWidth) > spaceLeft) && cnt){
-                tmpWord = tmpWord.slice(0,cnt--);
-                wordWidth = getWordWidth(tmpWord, vars.text.length, vars.textWidth);
-            }
-            return tmpWord+ellipsis;
         }
 
         // add new text element to group, TE contains part of line text
@@ -205,15 +207,15 @@ ctw.textwrap = function () {
                 .attr("text-anchor","middle").attr("dominant-baseline","central");
         }
 
-        console.log("how many lines", line);
-        console.log("lines", lines);
+        // console.log("how many lines", line);
+        // console.log("lines", lines);
         var lastLine = -line;
         // lines to be used
         function isOdd(num) {return (Math.abs(num) % 2) == 1;}
         var odd_last_line = isOdd(line);
-        console.log("odd_last_line", odd_last_line);
         var l2use = [];
         //console.log("----------------------------------------------------");
+        // compute which lines will be used
         for(var d_line in lines){
             var dl = parseInt(d_line);
             var lineOdd = isOdd(dl);
@@ -221,68 +223,55 @@ ctw.textwrap = function () {
             if(lineOdd===odd_last_line){
                 l2use.unshift(dl);
             }
-
         }
         //console.log("----------------------------------------------------");
-        //console.log("l2u",l2use,);
 
-        function compareNumbers(a, b) {
-            return b - a;
-        }
-        var sorted = l2use.sort(compareNumbers);
-        console.log(sorted);
-        for(var fuckOffIndex in sorted){
-            var drw_line = sorted[fuckOffIndex];
-            console.log("drw", drw_line);
-            var lineText = "";
-
-            var cnt = 10;
-            var currentLineWidth = lines[drw_line].width;
-            var lineTextWidth = 0;
+        l2use = l2use.sort(compareNumbers);
+        console.log("--------------------------------");
+        console.log("used lines should be",l2use);
+        console.log(vars.words);
+        for (var idx = 0; idx < l2use.length; idx++){
+            var lineNumber = l2use[idx];
+            var currentLine = lines[lineNumber];
+            var currentWordWidth, currentWord, tmpWordWidth;
+            // console.log(lineNumber, currentLine.width);
+            var remaining_space = currentLine.width;
+            var cnt = 0;
 
 
+            var textToInsert = "";
+            // console.log("word withs", vars.wordsWidht);
+            nextWordFit = true;
+            console.log("----start of while----");
+            while (nextWordFit && remaining_space>0){
+                console.log("-----while round",cnt,"---line--",lineNumber); cnt++;
+               // nextWord = vars.words.shift();
+                currentWord = vars.words.shift();
+                currentWordWidth = textBBDim(currentWord, vars).width;
 
-            while (cnt) {
-                cnt--;
-                var currentWord = vars.words.shift();
-                // console.log("line", line, lines[line], currentWord, getWordWidth(currentWord, vars.text.length, vars.textWidth));
-                if (canWordFit(currentWord, currentLineWidth, lineTextWidth)) {
-                    lineText = catText(lineText, currentWord);
-                    lineTextWidth = getWordWidth(lineText, vars.text.length, vars.textWidth);
-                    // console.log(line, "fit", lineText, currentLineWidth, lineTextWidth);
+                spacer();
+                tmpTextToInsert = catText(textToInsert, currentWord);
+                tmpWordWidth = textBBDim(tmpTextToInsert, vars).width;
+
+                // console.log("txt|",textToInsert,"|cww", tmpWordWidth, currentLine.width, lineNumber);
+                // console.log("rem space", remaining_space);
+                //tmpTextElement.remove();
+                //currentWord = vars.words.shift();
+                nextWordFit = canWordFit(tmpWordWidth, currentLine.width);
+                if(!nextWordFit){
+                    vars.words.unshift(currentWord);
                 }
-                else {
-                    // last word at last line
-                    if (drw_line === lastLine) {
-                        var spaceLeft = currentLineWidth - lineTextWidth ;
-                        // word + ellipsis
-                        var we = addEllipsis(currentWord, spaceLeft, lineText);
-                        // console.log(1,"we",we);
-                        lineText = catText(lineText, we);
-                        break;
-                    }// end if
-                    else {
-                        vars.words.unshift(currentWord);
-                        break;
-                    }// end else
+                else{
+                    textToInsert = tmpTextToInsert;
+                    remaining_space = remaining_space - tmpWordWidth;
+                }
+                console.log("cur word", currentWord, currentWordWidth,remaining_space, textToInsert);
+            }
 
-                }// end else
-            }//end while
-
-            console.log(drw_line,"text",lineText);
-            addTextElement(lineText, lines[drw_line].dy);
+            addTextElement(textToInsert, lines[lineNumber].dy);
         }
-        console.log("line", line);
-
-
-
-        
-        // create text tags 
-
-
 
     }
-    
 
     this.draw = function () {
 
@@ -293,53 +282,34 @@ ctw.textwrap = function () {
         _gElement.each(function (d) {
             // Create an object for passing around variables
             var vars = {};
+            vars.gElement = null; // circle group element
+            vars.textBaseElement = null; //base text element
+            vars.shape = null; // shape name circle/rectangle
+            vars.container = null; // not known for sure
+
             vars.gElement = d3.select(this);
             if (vars.gElement.node().tagName.toLowerCase() != 'g') {
                 console.warn("elements are not in group <g>");
                 return this;
             }
-
-            vars.textElement = vars.gElement.select("text");
+            vars.textBaseElement = vars.gElement.select("text");
 
             // Grab the container element and it's shape
-            // console.log("vte",vars.textElement);
-
+            // console.log("vte",vars.textBaseElement);
             // if element does not contain <text> element, return this ..whatever it is.
-            if (vars.textElement.empty()) return this;
-            var container = vars.textElement.node().previousElementSibling;
+            if (vars.textBaseElement.empty()) return this;
+            var container = vars.textBaseElement.node().previousElementSibling;
 
             vars.shape = container ? container.tagName.toLowerCase() :"";
             vars.container = d3.select(container);
-
-
             // Calculate some basic properties of the object we're dealing with
             parseContainerAttributes(vars);
-
             processText(vars);
-
-            // Ensure the element has no text
-            // vars.element.html("");
-
-            // // Resize or scale as appropriate
-            // if (_resize) {
-            //     resize(vars);
-            // } else {
-            //     flow(vars);
-            // }
-
-            // Wrap the font if neccessary
-            // if (vars.size[0] <= vars.innerHeight) {
-            //
-            // }
-            //console.log("dims",_x, _y, _width, _height);
-
         });
-
         return this;
     };
 
-    /// This required method tells d3plus which SVG text element to wrap text inside of. We
-    /// support all of the D3 Selection Methods, including D3 elements.
+    /// This required method tells d3plus which SVG text element to wrap text inside of.
     this.container = function (_) {
 
         if (!arguments.length) return _gElement;
@@ -353,3 +323,44 @@ ctw.textwrap = function () {
 
 
 
+      // for(var fuckOffIndex in sorted){
+        //     var drw_line = sorted[fuckOffIndex];
+        //     console.log("drw", drw_line);
+        //     var lineText = "";
+        //
+        //     var cnt = 10;
+        //     var currentLineWidth = lines[drw_line].width;
+        //     var lineTextWidth = 0;
+        //
+        //
+        //
+        //     // while (cnt) {
+        //     //     cnt--;
+        //     //     var currentWord = vars.words.shift();
+        //     //     // console.log("line", line, lines[line], currentWord, getWordWidth(currentWord, vars.text.length, vars.textInputWidth));
+        //     //     if (canWordFit(currentWord, currentLineWidth, lineTextWidth)) {
+        //     //         lineText = catText(lineText, currentWord);
+        //     //         lineTextWidth = getWordWidth(lineText, vars.text.length, vars.textInputWidth);
+        //     //         // console.log(line, "fit", lineText, currentLineWidth, lineTextWidth);
+        //     //     }
+        //     //     else {
+        //     //         // last word at last line
+        //     //         if (drw_line === lastLine) {
+        //     //             var spaceLeft = currentLineWidth - lineTextWidth ;
+        //     //             // word + ellipsis
+        //     //             var we = addEllipsis(currentWord, spaceLeft, lineText);
+        //     //             // console.log(1,"we",we);
+        //     //             lineText = catText(lineText, we);
+        //     //             break;
+        //     //         }// end if
+        //     //         else {
+        //     //             vars.words.unshift(currentWord);
+        //     //             break;
+        //     //         }// end else
+        //     //
+        //     //     }// end else
+        //     // }//end while
+        //
+        //     // console.log(drw_line,"text",lineText);
+        //     // addTextElement(lineText, lines[drw_line].dy);
+        // }

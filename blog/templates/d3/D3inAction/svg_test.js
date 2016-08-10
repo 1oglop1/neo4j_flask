@@ -31,7 +31,7 @@ var really_long_text = "This is really-long text, full - of ninjas, trees: with 
 really_long_text = "This is really text";
 // really_long_text = "This is ab";
 var long_text = "This is really text";
-console.log(really_long_text,really_long_text.length);
+// console.log(really_long_text,really_long_text.length);
 
 graph = JSON.parse(gjson);
 
