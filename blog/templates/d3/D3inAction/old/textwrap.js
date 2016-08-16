@@ -1,11 +1,9 @@
 /**
  * Created by oglop on 7/8/16.
  */
-//center = 0,0
-// line: y = kx + q
-// r
-// y = h/2, x = w/2 => w = 2x
-// max height = r .. if next rect00 > r, or
+// usage:
+// 1) create svg group - containing the <text> and <circle> which text should be wrapped.
+// 2) <circle>, must be in class "wrap", or no wrap is applied.
 
 function spacer(){
     console.log("-------------------------");
@@ -54,8 +52,7 @@ ctw.textwrap = function () {
     function catText(text1,text2){
         var text;
         var t1LastChar= text1.charAt(text1.length-1);
- // (text1 === "" || text2==="" )
-        var connector = " ";
+         var connector = " ";
         if(t1LastChar === "" || t1LastChar === "-"){
             connector = "";
         }
@@ -227,13 +224,13 @@ ctw.textwrap = function () {
         //console.log("----------------------------------------------------");
 
         l2use = l2use.sort(compareNumbers);
-        console.log("--------------------------------");
-        console.log("used lines should be",l2use);
-        console.log(vars.words);
+        // console.log("--------------------------------");
+        // console.log("used lines should be",l2use);
+        // console.log(vars.words);
         for (var idx = 0; idx < l2use.length; idx++){
             var lineNumber = l2use[idx];
             var currentLine = lines[lineNumber];
-            var currentWordWidth, currentWord, tmpWordWidth;
+            var currentWordWidth, currentWord, tmpWordWidth, tmpTextToInsert, nextWordFit;
             // console.log(lineNumber, currentLine.width);
             var remaining_space = currentLine.width;
             var cnt = 0;
@@ -242,14 +239,14 @@ ctw.textwrap = function () {
             var textToInsert = "";
             // console.log("word withs", vars.wordsWidht);
             nextWordFit = true;
-            console.log("----start of while----");
+            // console.log("----start of while----");
             while (nextWordFit && remaining_space>0){
-                console.log("-----while round",cnt,"---line--",lineNumber); cnt++;
+                // console.log("-----while round",cnt,"---line--",lineNumber); cnt++;
                // nextWord = vars.words.shift();
                 currentWord = vars.words.shift();
                 currentWordWidth = textBBDim(currentWord, vars).width;
 
-                spacer();
+                // spacer();
                 tmpTextToInsert = catText(textToInsert, currentWord);
                 tmpWordWidth = textBBDim(tmpTextToInsert, vars).width;
 
@@ -265,7 +262,7 @@ ctw.textwrap = function () {
                     textToInsert = tmpTextToInsert;
                     remaining_space = remaining_space - tmpWordWidth;
                 }
-                console.log("cur word", currentWord, currentWordWidth,remaining_space, textToInsert);
+                // console.log("cur word", currentWord, currentWordWidth,"<ww, r>", remaining_space, textToInsert, "lineLen", currentLine.width);
             }
 
             addTextElement(textToInsert, lines[lineNumber].dy);
@@ -292,7 +289,7 @@ ctw.textwrap = function () {
                 console.warn("elements are not in group <g>");
                 return this;
             }
-            vars.textBaseElement = vars.gElement.select("text");
+            vars.textBaseElement = vars.gElement.select("text.wrap");
 
             // Grab the container element and it's shape
             // console.log("vte",vars.textBaseElement);

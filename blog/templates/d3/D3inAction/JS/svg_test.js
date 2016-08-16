@@ -69,6 +69,13 @@ var group_2 = zoom_box.append("g").attr("id", "group_2")
     .attr("class","node")
     ;
 
+var group_3 = zoom_box.append("g").attr("id", "group_3")
+    // .attr("stroke","blue")
+    // .attr("stroke-width",2)
+    .attr("transform", String.format("translate({0}, {1})", 255, 255))
+    .attr("class","node")
+    ;
+
 
 
 var circle_1 = group_1.append("circle").attr("r",radius).attr("id","circle1").attr("fill", "green");
@@ -78,24 +85,21 @@ var circle_1 = group_1.append("circle").attr("r",radius).attr("id","circle1").at
 var circle_2 = group_2.append("circle").attr("r",radius).attr("id","circle2").attr("fill", "yellow");
 
 var txtg1 = group_1.append("text").attr("text-anchor","middle").text("Not very long text yellow fill")
-            .attr("dy",0)
+            .attr("dy",0).attr("class","wrap")
             .style("font-size", base_font_size).attr("id","txt")
             .attr("dominant-baseline", "central");
 
 var txt = group_2.append("text").attr("text-anchor","middle").text(really_long_text)
-            .attr("dy",0)
+            .attr("dy",0).attr("class","wrap")
             .style("font-size", base_font_size).attr("id","txt")
             .attr("dominant-baseline", "central");
 
-// var txt2 = group_2.append("text").attr("text-anchor","middle").text(really_long_text)
-//             .attr("dy",0)
-//             .style("font-size", base_font_size).attr("id","txt2")
-//             .attr("dominant-baseline", "central");
-//
-// var txt3 = group_2.append("text").attr("text-anchor","middle").text(really_long_text)
-//             .attr("dy",0)
-//             .style("font-size", base_font_size).attr("id","txt3")
-//             .attr("dominant-baseline", "central");
+var circle_3 = group_3.append("circle").attr("r",radius).attr("id","circle2").attr("fill", "red");
+
+var txtg7 = group_3.append("text").attr("text-anchor","middle").text("Word1 Word2 WOrd3 Word4 Word5 Word6 Word7 Word8")
+            .attr("dy",0).attr("class","wrap")
+            .style("font-size", base_font_size).attr("id","txt7")
+            .attr("dominant-baseline", "central");
 
 tn = txt.node();
 // tn2 = txt2.node();
@@ -110,7 +114,7 @@ tn = txt.node();
 //     .attr("stroke-dasharray","0.5");
 
 
-
+console.log("svg js loaded");
 
 var drag = d3.drag();
 
