@@ -1,19 +1,30 @@
 .node {
-  /*fill: red;*/
+  fill: red;
   /*stroke: #222;*/
   /*stroke-width: 1.5px;*/
 }
-.link {
-  stroke: #999;
-  stroke-opacity: .6;
-  stroke-width: 2px;
+
+.node.Person{
+    fill: yellow;
 }
+
+.node.Database{
+    fill: green;
+}
+
+.link line{
+  /*stroke: #999;*/
+    stroke: black;
+  /*stroke-opacity: .6;*/
+  stroke-width: 20px;
+}
+
+/*#zoom_box > g:nth-child(2) > text*/
 
 text {
   font-family: 'Fira Mono', monospace;
   /*font-family: 'Roboto Mono';*/
-  /*fill: none;*/
-
+  fill: black;
   pointer-events: none;
 }
 

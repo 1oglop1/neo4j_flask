@@ -85,19 +85,19 @@ var circle_1 = group_1.append("circle").attr("r",radius).attr("id","circle1").at
 var circle_2 = group_2.append("circle").attr("r",radius).attr("id","circle2").attr("fill", "yellow");
 
 var txtg1 = group_1.append("text").attr("text-anchor","middle").text("Not very long text yellow fill")
-            .attr("dy",0).attr("class","wrap")
+            .attr("dy",0).attr("class","wrap map")
             .style("font-size", base_font_size).attr("id","txt")
             .attr("dominant-baseline", "central");
 
 var txt = group_2.append("text").attr("text-anchor","middle").text(really_long_text)
-            .attr("dy",0).attr("class","wrap")
+            .attr("dy",0).attr("class","wrap bap")
             .style("font-size", base_font_size).attr("id","txt")
             .attr("dominant-baseline", "central");
 
 var circle_3 = group_3.append("circle").attr("r",radius).attr("id","circle2").attr("fill", "red");
 
 var txtg7 = group_3.append("text").attr("text-anchor","middle").text("Word1 Word2 WOrd3 Word4 Word5 Word6 Word7 Word8")
-            .attr("dy",0).attr("class","wrap")
+            .attr("dy",0).attr("class","wrap crap")
             .style("font-size", base_font_size).attr("id","txt7")
             .attr("dominant-baseline", "central");
 
@@ -136,18 +136,18 @@ function dragged(){
 
 }
 
-
-
-zoom.on("zoom", zooming);
-svg_tag.call(zoom);
-
-// ctw.textwrap().container(group_2).draw();
-ctw.textwrap().container(groups).draw();
-
 function zooming() {
     var transform = d3.event.transform;
     zoom_box.attr("transform", transform)
 	}
+
+zoom.on("zoom", zooming);
+svg_tag.call(zoom);
+
+
+// ctw.textwrap().container(group_2).draw();
+ctw.textwrap().container(groups).draw();
+
 
 
 

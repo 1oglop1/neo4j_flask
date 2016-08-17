@@ -54,7 +54,6 @@ ctw.textwrap = function () {
     function catText(text1,text2){
         var text;
         var t1LastChar= text1.charAt(text1.length-1);
- // (text1 === "" || text2==="" )
         var connector = " ";
         if(t1LastChar === "" || t1LastChar === "-"){
             connector = "";
@@ -63,6 +62,7 @@ ctw.textwrap = function () {
         return text;
     }
 
+    // returns BBox
     function textBBDim(text, vars){
         var wordElement = _gElement.append("text").text(text);
         var wordBBox = wordElement.node().getBBox();
@@ -203,8 +203,13 @@ ctw.textwrap = function () {
 
         // add new text element to group, TE contains part of line text
         function addTextElement(text, dy){
+            var baseClasses = vars.textBaseElement.classed("wrap", false).classed("wrapped", true).attr("class");
+
+            console.log("classes", baseClasses);
+
             vars.gElement.append("text").attr("dy",dy).text(text)
-                .attr("text-anchor","middle").attr("dominant-baseline","central");
+                .attr("text-anchor","middle").attr("dominant-baseline","central")
+                .classed(baseClasses,true);
         }
 
         // console.log("how many lines", line);
