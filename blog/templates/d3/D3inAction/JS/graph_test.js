@@ -102,16 +102,6 @@ var drag = d3.drag();
 //   d3.event.subject.fy = null;
 // }
 
-function drawLink(d) {
-  context.moveTo(d.source.x, d.source.y);
-  context.lineTo(d.target.x, d.target.y);
-}
-
-function drawNode(d) {
-  context.moveTo(d.x + 3, d.y);
-  context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
-}
-
 
 function main(graph) {
     console.log("graph loaded");
@@ -136,7 +126,7 @@ function main(graph) {
         .style("font-size", base_font_size)
         // .attr("class","txt")
         .text(function (d) { return "" + d.name; });
-    // node.call(drag.on("drag", dragged));
+    node.call(drag.on("drag", dragged));
 
 // .attr("dy",0).attr("class","wrap")
 //             .style("font-size", base_font_size).attr("id","txt")
@@ -160,16 +150,16 @@ function main(graph) {
     var nodesAll = nodesGroup.selectAll(".node");
     nodesAll.call(drag.on("drag", dragged));
 
-    var simulation = d3.forceSimulation(nodesAll)
-    .force("charge", d3.forceManyBody())
-    // .force("link", d3.forceLink(links).distance(20).strength(1))
-    .force("x", d3.forceX())
-    .force("y", d3.forceY())
-    .on("tick", ticked);
-
-    function dragsubject() {
-  return simulation.find(d3.event.x - width / 2, d3.event.y - height / 2);
-    }
+  //   var simulation = d3.forceSimulation(nodesAll)
+  //   .force("charge", d3.forceManyBody())
+  //   // .force("link", d3.forceLink(links).distance(20).strength(1))
+  //   .force("x", d3.forceX())
+  //   .force("y", d3.forceY())
+  //   .on("tick", ticked);
+  //
+  //   function dragsubject() {
+  // return simulation.find(d3.event.x - width / 2, d3.event.y - height / 2);
+  //   }
 
     // nodesAll.call(simulation.on("tick", ticked));
 

@@ -90,7 +90,7 @@ var txtg1 = group_1.append("text").attr("text-anchor","middle").text("Not very l
             .attr("dominant-baseline", "central");
 
 var txt = group_2.append("text").attr("text-anchor","middle").text(really_long_text)
-            .attr("dy",0).attr("class","wrap bap")
+            .attr("dy",0).attr("class","wrap")
             .style("font-size", base_font_size).attr("id","txt")
             .attr("dominant-baseline", "central");
 
